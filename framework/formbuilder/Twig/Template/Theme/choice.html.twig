@@ -1,0 +1,41 @@
+{% if field.expanded is defined and field.expanded == true %}{# checkbox/radio #}
+	{% for key,option in field.options %}
+		{% if field.optionsCallback is defined %}
+			{% set propertyAccessPath = field.optionsCallback.property|split('.') %}
+			{% set property = option %}
+			{% for path in propertyAccessPath %}
+				{% set property = attribute(property,path) %}
+			{% endfor %}
+		{% endif %}
+		{% if field.multiple is defined and field.multiple == true %}{# checkbox #}
+			{% set checked = false %}
+			{% for k,i in value %}
+				{% if (attribute(i,field.optionsCallback.value) is defined and key == attribute(i,field.optionsCallback.value)) or (attribute(i,field.optionsCallback.value) is not defined and key == i) %}
+					{% set checked = true %}
+				{% endif %}
+			{% endfor %}
+			<input type="checkbox" id="form_{{formParents(formParents,'id')}}{{name}}_{{loop.index0}}" name="form{{formParents(formParents,'name')}}[{{name}}][]" value="{{key}}"{{ formAttributes(field.attributes) }}{% if checked %} checked="checked"{% endif %}>
+		{% else %}{# radio #}
+			<input type="radio" id="form_{{formParents(formParents,'id')}}{{name}}_{{loop.index0}}" name="form{{formParents(formParents,'name')}}[{{name}}]" value="{{key}}"{{ formAttributes(field.attributes) }}{% if key == value %} checked="checked"{% endif %}>
+		{% endif %}
+		<label for="form_{{name}}_{{loop.index0}}">{{field.optionsCallback is defined ? property : option}}</label>
+	{% endfor %}
+{% else %}{# selectbox #}
+	<select id="form_{{formParents(formParents,'id')}}{{name}}" name="form{{formParents(formParents,'name')}}[{{name}}]" value="{{(field.optionsCallback is defined and attribute(value,field.optionsCallback.value) is not null ? attribute(value,field.optionsCallback.value) : value)}}"{{ formAttributes(field.attributes) }}{% if field.multiple is defined and field.multiple == true %} multiple="multiple"{% endif %}>
+		{% if field.emptyOption is defined %}
+			<option value="">{{field.emptyOption}}</option>
+		{% endif %}
+		{% for key,option in field.options %}
+			{% if field.optionsCallback is defined %}
+				{% set propertyAccessPath = field.optionsCallback.property|split('.') %}
+				{% set property = option %}
+				{% if field.optionsCallback.property is not null %}
+					{% for path in propertyAccessPath %}
+						{% set property = attribute(property,path) %}
+					{% endfor %}
+				{% endif %}
+			{% endif %}
+			<option value="{{key}}"{% if (field.optionsCallback is defined and attribute(value,field.optionsCallback.value) is not null ? attribute(value,field.optionsCallback.value) : value) == key %} selected="selected"{% endif %}>{{field.optionsCallback is defined ? property : option}}</option>
+		{% endfor %}
+	</select>
+{% endif %}
