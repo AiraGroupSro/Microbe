@@ -9,10 +9,12 @@ class Email implements ConstraintInterface{
 	public static function validate($value,$options = null){
 		$isValid = true;
 		$atIndex = strrpos($value, "@");
-		if(is_bool($atIndex) and !$atIndex){
+
+		if ($options === 'ifNotEmpty' && $value === '') {
+			return true;
+		} elseif (is_bool($atIndex) and !$atIndex){
 			$isValid = false;
-		}
-		else{
+		} else {
 			$domain = substr($value, $atIndex+1);
 			$local = substr($value, 0, $atIndex);
 			$localLen = strlen($local);
