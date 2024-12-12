@@ -4,18 +4,12 @@ namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\canonicalizer\Canonicalizer;
 
-class CanonicalizeExtension extends \Twig_Extension
+class CanonicalizeExtension extends \Twig\Extension\AbstractExtension
 {
 
     public function getFilters(){
         return [
-            new \Twig_SimpleFilter(
-                'canonicalize',
-                array(
-                    $this,
-                    'canonicalize'
-                )
-            )
+            new \Twig\TwigFilter('canonicalize', [$this, 'canonicalize']),
         ];
     }
 

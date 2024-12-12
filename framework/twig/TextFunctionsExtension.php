@@ -2,18 +2,12 @@
 
 namespace AiraGroupSro\Microbe\framework\twig;
 
-class TextFunctionsExtension extends \Twig_Extension
+class TextFunctionsExtension extends \Twig\Extension\AbstractExtension
 {
 
     public function getFilters(){
         return [
-            new \Twig_SimpleFilter(
-                'ucfirst',
-                [
-                    $this,
-                    'utfUcfirst'
-                ]
-            )
+            new \Twig\TwigFilter('ucfirst', [$this, 'utfUcfirst'])
         ];
     }
 

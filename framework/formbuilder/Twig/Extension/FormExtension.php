@@ -5,12 +5,13 @@ namespace AiraGroupSro\Microbe\framework\formbuilder\Twig\Extension;
 use AiraGroupSro\Microbe\framework\formbuilder\Factory\FormFactory;
 use AiraGroupSro\Microbe\framework\translator\Translator;
 
-class FormExtension extends \Twig_Extension
+class FormExtension extends \Twig\Extension\AbstractExtension
 {
 
     protected $twig;
+	protected $translator;
 
-    public function __construct(\Twig_Environment $twig, Translator $translator){
+    public function __construct(\Twig\Environment $twig, Translator $translator){
         $this->twig = $twig;
         $this->translator = $translator;
     }
@@ -20,7 +21,7 @@ class FormExtension extends \Twig_Extension
         $twig->getLoader()->addPath(__DIR__.'/../Template');
         
         return [
-            new \Twig_SimpleFunction('form',function($form,$path,$attributes = [],$options = []) use ($twig){
+            new \Twig\TwigFunction('form',function($form,$path,$attributes = [],$options = []) use ($twig){
                 return $twig->render('form.html.twig',[
                     'form' => $form,
                     'path' => $path,
@@ -28,7 +29,7 @@ class FormExtension extends \Twig_Extension
                     'options' => $options
                 ]);
             },['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('formAttributes',function($attributes = null) use ($twig){
+            new \Twig\TwigFunction('formAttributes',function($attributes = null) use ($twig){
                 $attributesString = '';
                 if($attributes !== null){
                     foreach ($attributes as $key => $value) {
@@ -42,7 +43,7 @@ class FormExtension extends \Twig_Extension
                 }
                 return $attributesString;
             },['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('formParents',function($formParents,$type = 'name') use ($twig){
+            new \Twig\TwigFunction('formParents',function($formParents,$type = 'name') use ($twig){
                 $parentString = '';
                 if(count($formParents)){
                     if($type === 'name'){
@@ -54,7 +55,7 @@ class FormExtension extends \Twig_Extension
                 }
                 return $parentString;
             },['is_safe' => ['html']]),
-            new \Twig_SimpleFunction('formField',function($form,$name,$field,$value,$formParents = []) use ($twig){
+            new \Twig\TwigFunction('formField',function($form,$name,$field,$value,$formParents = []) use ($twig){
                 return $twig->render('Theme/'.$field['type'].'.html.twig',[
                     'form' => $form,
                     'name' => $name,

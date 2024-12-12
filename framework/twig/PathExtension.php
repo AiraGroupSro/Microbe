@@ -4,7 +4,7 @@ namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\router\Router;
 
-class PathExtension extends \Twig_Extension
+class PathExtension extends \Twig\Extension\AbstractExtension
 {
 
     protected $router;
@@ -16,7 +16,7 @@ class PathExtension extends \Twig_Extension
     public function getFunctions(){
         $router = $this->router;
         return [
-            new \Twig_SimpleFunction('path',function($pathName,$options = [],$absolute = false) use ($router){
+            new \Twig\TwigFunction('path',function($pathName,$options = [],$absolute = false) use ($router){
                 return $router->path($pathName,$options,$absolute);
             }),
         ];

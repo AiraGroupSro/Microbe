@@ -4,7 +4,7 @@ namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\router\Router;
 
-class AssetExtension extends \Twig_Extension
+class AssetExtension extends \Twig\Extension\AbstractExtension
 {
 
     protected $router;
@@ -19,7 +19,7 @@ class AssetExtension extends \Twig_Extension
 
     public function getFunctions(){
         return [
-            new \Twig_SimpleFunction('asset',function($assetPath,$absolute = false){
+            new \Twig\TwigFunction('asset',function($assetPath,$absolute = false){
                 $path = '';
                 if($absolute === true){
                     $path .= $this->router->getRoot();

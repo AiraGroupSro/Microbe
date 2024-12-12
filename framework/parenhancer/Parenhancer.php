@@ -33,7 +33,7 @@ class Parenhancer{
         foreach ($this->getParametersToEnhance($string) as $parameter) {
             $parameterKey = trim($parameter,'%');
             if(array_key_exists($parameterKey,$this->parameters)){
-                $string = str_replace($parameter,$this->parameters[$parameterKey],$string);
+                $string = str_replace($parameter, $this->parameters[$parameterKey] ?? '',$string);
             }
         }
 
@@ -56,7 +56,7 @@ class Parenhancer{
 
     protected function getParametersToEnhance($string){
         $parameters = array();
-        preg_match_all('/%[^%]+%/',$string,$parameters);
+        preg_match_all('/%[^%]+%/',$string ?? '',$parameters);
         return $parameters[0];
     }
 

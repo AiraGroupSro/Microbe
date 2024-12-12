@@ -4,7 +4,7 @@ namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\translator\Translator;
 
-class TranslateExtension extends \Twig_Extension
+class TranslateExtension extends \Twig\Extension\AbstractExtension
 {
 
     protected $translator;
@@ -15,13 +15,7 @@ class TranslateExtension extends \Twig_Extension
 
     public function getFilters(){
         return [
-            new \Twig_SimpleFilter(
-                'translate',
-                [
-                    $this,
-                    'translate'
-                ]
-            )
+			new \Twig\TwigFilter('translate', [$this, 'translate']),
         ];
     }
 

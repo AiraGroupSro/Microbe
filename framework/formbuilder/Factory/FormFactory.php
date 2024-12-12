@@ -29,7 +29,7 @@ class FormFactory{
 		} catch (\Exception $e) {
 			throw new InvalidConfigurationException('Configuration for form "'.$formName.'" is not a valid YML file!');
 		}
-		
+
 		/// create and return form generated according to the configuration
 		return new GeneratedForm($fields,$entity,$formParents,$options);
 	}

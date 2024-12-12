@@ -4,7 +4,7 @@ namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\router\Router;
 
-class RenderExtension extends \Twig_Extension
+class RenderExtension extends \Twig\Extension\AbstractExtension
 {
 
     protected $router;
@@ -16,7 +16,7 @@ class RenderExtension extends \Twig_Extension
     public function getFunctions(){
         $router = $this->router;
         return [
-            new \Twig_SimpleFunction('render',function($controller,$action,$options = []) use ($router){
+            new \Twig\TwigFunction('render',function($controller,$action,$options = []) use ($router){
                 return $router->render($controller,$action,$options);
             }),
         ];
