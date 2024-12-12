@@ -30,9 +30,8 @@ class Microbe{
 		$configuration = $parenhancer->enhanceArray($configuration);
 
 		/// initialize twig
-		\Twig_Autoloader::register();
-		$loader = new \Twig_Loader_Filesystem($configuration['twig']['pathToTemplates']);
-		$twig = new \Twig_Environment($loader, [
+		$loader = new \Twig\Loader\FilesystemLoader($configuration['twig']['pathToTemplates']);
+		$twig = new \Twig\Environment($loader, [
 			'cache' => $env !== 'prod' ? false : $configuration['twig']['pathToCache'],
 		]);
 
@@ -62,31 +61,16 @@ class Microbe{
 
         /// initialize mailer
         $mailer = null;
-        $mailerConfig = $configuration['swiftmailer'];
+        $mailerConfig = $configuration['mailer'];
         if(isset($mailerConfig) && isset($mailerConfig['enable']) && $mailerConfig['enable'] === true){
-            $transport = \Swift_MailTransport::newInstance();
 
-            if (isset($mailerConfig['transport']) && $mailerConfig['transport'] === 'smtp') {
-                $transport = \Swift_SmtpTransport::newInstance(
-                    isset($mailerConfig['host']) ? $mailerConfig['host'] : null,
-                    isset($mailerConfig['port']) ? $mailerConfig['port'] : null,
-                    isset($mailerConfig['encryption']) ? $mailerConfig['encryption'] : null
-                );
+            if (isset($mailerConfig['transport']) && $mailerConfig['transport'] === 'smtp' && !empty($mailerConfig['dsn'])) {
+                $transport = \Symfony\Component\Mailer\Transport::fromDsn($mailerConfig['dsn']);
+            } else {
+				$transport = \Symfony\Component\Mailer\Transport::fromDsn('smtp://localhost');
+			}
 
-                if (isset($mailerConfig['auth_mode'])) {
-                    $transport = $transport->setAuthMode($mailerConfig['auth_mode']);
-                }
-
-                if (isset($mailerConfig['username'])) {
-                    $transport = $transport->setUsername($mailerConfig['username']);
-                }
-
-                if (isset($mailerConfig['password'])) {
-                    $transport = $transport->setPassword($mailerConfig['password']);
-                }
-            }
-
-            $mailer = \Swift_Mailer::newInstance($transport);
+            $mailer = new \Symfony\Component\Mailer\Mailer($transport);
         }
 
 		/// initialize gatekeeper
