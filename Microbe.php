@@ -20,6 +20,8 @@ use AiraGroupSro\Microbe\framework\parenhancer\Parenhancer;
 use AiraGroupSro\Microbe\framework\gatekeeper\Gatekeeper;
 use AiraGroupSro\Microbe\framework\formbuilder\Twig\Extension\FormExtension;
 use AiraGroupSro\Microbe\framework\flashmessenger\FlashMessenger;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\Transport;
 
 class Microbe{
 
@@ -65,12 +67,12 @@ class Microbe{
         if(isset($mailerConfig) && isset($mailerConfig['enable']) && $mailerConfig['enable'] === true){
 
             if (isset($mailerConfig['transport']) && $mailerConfig['transport'] === 'smtp' && !empty($mailerConfig['dsn'])) {
-                $transport = \Symfony\Component\Mailer\Transport::fromDsn($mailerConfig['dsn']);
+                $transport = Transport::fromDsn($mailerConfig['dsn']);
             } else {
-				$transport = \Symfony\Component\Mailer\Transport::fromDsn('smtp://localhost');
+				$transport = Transport::fromDsn('sendmail://default?command=/usr/bin/sendmail%20-t');
 			}
 
-            $mailer = new \Symfony\Component\Mailer\Mailer($transport);
+            $mailer = new Mailer($transport);
         }
 
 		/// initialize gatekeeper
@@ -127,5 +129,3 @@ class Microbe{
 	}
 
 }
-
-?>
