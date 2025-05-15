@@ -8,6 +8,7 @@ class Email implements ConstraintInterface{
 
 	public static function validate($value,$options = null){
 		$isValid = true;
+		$value = (string) $value;
 		$atIndex = strrpos($value, "@");
 
 		if ($options === 'ifNotEmpty' && $value === '') {
