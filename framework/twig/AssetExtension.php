@@ -3,8 +3,10 @@
 namespace AiraGroupSro\Microbe\framework\twig;
 
 use AiraGroupSro\Microbe\framework\router\Router;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class AssetExtension extends \Twig\Extension\AbstractExtension
+class AssetExtension extends AbstractExtension
 {
 
     protected $router;
@@ -17,9 +19,10 @@ class AssetExtension extends \Twig\Extension\AbstractExtension
         $this->theme = $theme;
     }
 
-    public function getFunctions(){
+    public function getFunctions(): array
+	{
         return [
-            new \Twig\TwigFunction('asset',function($assetPath,$absolute = false){
+            new TwigFunction('asset',function($assetPath,$absolute = false){
                 $path = '';
                 if($absolute === true){
                     $path .= $this->router->getRoot();
@@ -32,7 +35,8 @@ class AssetExtension extends \Twig\Extension\AbstractExtension
                     $path .= '/public/'.$assetPath;
                 }
                 else{
-                    $path .= '/src/themes/'.$this->theme.'/prod/'.preg_replace('/^theme\//i','',$assetPath);
+					$path .= '/public/'.$assetPath; // pro DEV stejna cesta, at se nemusi povolovat pravo na cteni mimo hlavni adresar
+                    //$path .= '/src/themes/'.$this->theme.'/prod/'.preg_replace('/^theme\//i','',$assetPath);
                 }
 
                 return $path;
