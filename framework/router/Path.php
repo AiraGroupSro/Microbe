@@ -14,7 +14,7 @@ class Path
     public function setOptions($options){
         if(is_array($options) && count($options)){
             foreach ($options as $option => $value) {
-                $this->uri = str_replace('{'.$option.'}',$value,$this->uri);
+                $this->uri = str_replace('{'.$option.'}',$value ?? '',$this->uri);
             }
         }
     }
